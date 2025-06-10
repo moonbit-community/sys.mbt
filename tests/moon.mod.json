@@ -1,0 +1,9 @@
+{
+  "name": "myfreess/sys_test",
+  "deps": {
+    "myfreess/sys": {
+      "path": ".."
+    }
+  },
+  "preferred-target": "native"
+}
