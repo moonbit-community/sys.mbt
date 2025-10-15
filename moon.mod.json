@@ -1,8 +1,7 @@
 {
   "name": "myfreess/sys",
   "version": "0.0.1",
-  "deps": {
-  },
+  "deps": {},
   "readme": "README.md",
   "repository": "",
   "license": "Apache-2.0",
