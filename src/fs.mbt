@@ -223,7 +223,7 @@ pub fn Permissions::is_readonly(self : Permissions) -> Bool {
 pub fn File::read(
   self : File,
   buf : FixedArray[Byte],
-  offset~ : Int = 0,
+  offset? : Int = 0,
 ) -> Int raise SysError {
   let capacity = buf.length()
   let have_read = moonbit_file_read(self, buf, offset, capacity)
@@ -235,7 +235,7 @@ pub fn File::read(
 pub fn File::write(
   self : File,
   buf : FixedArray[Byte],
-  offset~ : Int = 0,
+  offset? : Int = 0,
 ) -> Int raise SysError {
   let capacity = buf.length()
   let written = moonbit_file_write(self, buf, offset, capacity)

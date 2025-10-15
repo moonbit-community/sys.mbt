@@ -1,8 +1,7 @@
 {
     "import": [
         "myfreess/sys/errno/win32",
-        "myfreess/sys/errno/linux",
-        "tonyfettes/encoding"
+        "myfreess/sys/errno/linux"
     ],
     "link": {
         "native": {
@@ -14,5 +13,6 @@
     ],
     "supported-targets": [
         "native"
-    ]
+    ],
+    "warn-list": "-1-6"
 }

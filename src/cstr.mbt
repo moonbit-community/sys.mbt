@@ -1,5 +1,5 @@
 ///|
-struct CStr(Bytes)
+priv struct CStr(Bytes)
 
 ///|
 trait AsCStr {
@@ -33,7 +33,7 @@ pub impl AsCStr for String with to_cstr(self) {
 }
 
 ///|
-pub impl AsCStr for @string.View with to_cstr(self) {
+pub impl AsCStr for StringView with to_cstr(self) {
   return OsStr::from(self).to_cstr()
 }
 

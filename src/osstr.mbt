@@ -1,16 +1,16 @@
 ///|
-struct OsStrBuilder(@buffer.T)
+struct OsStrBuilder(@buffer.Buffer)
 
 ///|
 extern "c" fn moonbit_os_iswin32() -> Bool = "moonbit_os_iswin32"
 
 ///|
-pub fn OsStrBuilder::new(size_hint~ : Int = 20) -> OsStrBuilder {
+pub fn OsStrBuilder::new(size_hint? : Int = 20) -> OsStrBuilder {
   return OsStrBuilder(@buffer.new(size_hint~))
 }
 
 ///|
-pub fn OsStrBuilder::from(view : @string.View) -> OsStrBuilder {
+pub fn OsStrBuilder::from(view : StringView) -> OsStrBuilder {
   let buf = OsStrBuilder(@buffer.new(size_hint=view.length() * 4))
   buf.push(view)
   return buf
@@ -24,11 +24,11 @@ pub fn OsStrBuilder::from_osstr(osstr : OsStr) -> OsStrBuilder {
 }
 
 ///|
-pub fn OsStrBuilder::push(self : OsStrBuilder, str : @string.View) -> Unit {
+pub fn OsStrBuilder::push(self : OsStrBuilder, str : StringView) -> Unit {
   if moonbit_os_iswin32() {
-    self.inner().write_stringview(str)
+    self.inner().write_string_utf16le(str)
   } else {
-    @encoding.encode_to(str, self.inner(), encoding=UTF8)
+    self.inner().write_string_utf8(str)
   }
 }
 
@@ -46,12 +46,12 @@ pub fn OsStrBuilder::to_osstr(self : OsStrBuilder) -> OsStr {
 struct OsStr(Bytes)
 
 ///|
-pub fn OsStr::from(str : @string.View) -> OsStr {
+pub fn OsStr::from(str : StringView) -> OsStr {
   OsStrBuilder::from(str).to_osstr()
 }
 
 ///|
-pub impl Add for OsStr with op_add(self : OsStr, other : OsStr) {
+pub impl Add for OsStr with add(self : OsStr, other : OsStr) {
   self.inner() + other.inner()
 }
 
@@ -61,8 +61,7 @@ pub impl Show for OsStr with output(self, logger) {
   if moonbit_os_iswin32() {
     logger.write_string(self.inner().to_unchecked_string())
   } else {
-    let decoder = @encoding.decoder(UTF8)
-    logger.write_string(decoder.decode_lossy(self.inner()))
+    logger.write_string(@encoding/utf8.decode_lossy(self.inner()))
   }
   logger.write_string("\")")
 }

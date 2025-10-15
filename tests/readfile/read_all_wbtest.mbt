@@ -3,13 +3,15 @@ test {
   inspect(
     test_read_all("readfile/foo.txt"),
     content=(
-      #|b"\x41\x42\x43\x44\x45\x46"
+      #|b"ABCDEF"
+
     ),
   )
   inspect(
     test_read_all("readfile/bar.txt"),
     content=(
-      #|b"\x31\x30\x0a\x31\x31\x0a\x31\x32\x0a\x31\x33\x0a\x31\x34\x0a\x31\x35"
+      #|b"10\x0a11\x0a12\x0a13\x0a14\x0a15"
+
     ),
   )
   inspect(

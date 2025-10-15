@@ -10,12 +10,12 @@ pub fn Path::op_add(self : Path, other : Path) -> Path {
 }
 
 ///|
-pub fn Path::from(view : @string.View) -> Path {
+pub fn Path::from(view : StringView) -> Path {
   Path(OsStrBuilder::from(view).to_osstr())
 }
 
 ///|
-pub fn Path::join(self : Path, other : ArrayView[@string.View]) -> Path {
+pub fn Path::join(self : Path, other : ArrayView[StringView]) -> Path {
   let buf = OsStrBuilder::from_osstr(self.inner())
   for str in other {
     buf.push(path_separator)
@@ -25,7 +25,7 @@ pub fn Path::join(self : Path, other : ArrayView[@string.View]) -> Path {
 }
 
 ///|
-pub fn Path::as_view(self : Path) -> @bytes.View {
+pub fn Path::as_view(self : Path) -> BytesView {
   self.inner().inner()[:]
 }
 
@@ -40,7 +40,7 @@ pub impl AsPath for Path with to_path(self) {
 }
 
 ///|
-pub impl AsPath for @string.View with to_path(self) {
+pub impl AsPath for StringView with to_path(self) {
   return Path::from(self)
 }
 
@@ -67,7 +67,6 @@ let nt_prefix : String = "\\??\\"
 // \\?\UNC\
 
 ///|
-let unc_prefix : String = "\\\\?\\UNC\\"
 
 ///|
 fn maybe_verbatim(path : Path) -> OsStr {
@@ -77,5 +76,6 @@ fn maybe_verbatim(path : Path) -> OsStr {
     // Early return for paths that are already verbatim
     return path.inner()
   }
-  ...
+  // Return the path as-is if no verbatim prefix is found
+  path.inner()
 }

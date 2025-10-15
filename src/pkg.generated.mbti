@@ -1,15 +1,12 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "myfreess/sys"
 
-import(
-  "moonbitlang/core/bytes"
-  "moonbitlang/core/string"
-)
-
 // Values
 fn[P : AsPath] create_dir(P) -> Unit raise SysError
 
 fn[P : AsPath] create_file(P) -> File raise SysError
+
+fn moonbit_stdin() -> File
 
 fn[P : AsPath] open_file(P) -> File raise SysError
 
@@ -24,11 +21,11 @@ pub suberror SysError {
   Message(String)
 }
 fn SysError::kind(Self) -> SysErrorKind
+fn SysError::output(Self, &Logger) -> Unit // from trait `Show`
+fn SysError::to_string(Self) -> String // from trait `Show`
 impl Show for SysError
 
 // Types and methods
-type CStr
-
 #external
 pub type File
 fn File::close(Self) -> Unit raise SysError
@@ -50,25 +47,30 @@ fn Metadata::is_symlink(Self) -> Bool
 fn Metadata::permissions(Self) -> Permissions
 
 type OsStr
-fn OsStr::from(@string.StringView) -> Self
+fn OsStr::add(Self, Self) -> Self // from trait `Add`
+fn OsStr::from(StringView) -> Self
+#deprecated
+fn OsStr::op_add(Self, Self) -> Self // from trait `Add`
+fn OsStr::output(Self, &Logger) -> Unit // from trait `Show`
+fn OsStr::to_string(Self) -> String // from trait `Show`
 impl Add for OsStr
 impl Show for OsStr
 impl AsCStr for OsStr
 impl AsPath for OsStr
 
 type OsStrBuilder
-fn OsStrBuilder::from(@string.StringView) -> Self
+fn OsStrBuilder::from(StringView) -> Self
 fn OsStrBuilder::from_osstr(OsStr) -> Self
 fn OsStrBuilder::new(size_hint? : Int) -> Self
-fn OsStrBuilder::push(Self, @string.StringView) -> Unit
+fn OsStrBuilder::push(Self, StringView) -> Unit
 fn OsStrBuilder::push_osstr(Self, OsStr) -> Unit
 fn OsStrBuilder::to_osstr(Self) -> OsStr
 impl AsCStr for OsStrBuilder
 
 type Path
-fn Path::as_view(Self) -> @bytes.View
-fn Path::from(@string.StringView) -> Self
-fn Path::join(Self, ArrayView[@string.StringView]) -> Self
+fn Path::as_view(Self) -> BytesView
+fn Path::from(StringView) -> Self
+fn Path::join(Self, ArrayView[StringView]) -> Self
 fn Path::op_add(Self, Self) -> Self
 impl AsCStr for Path
 impl AsPath for Path
@@ -117,6 +119,11 @@ pub enum SysErrorKind {
   InProgress
   Uncategorized
 }
+fn SysErrorKind::equal(Self, Self) -> Bool // from trait `Eq`
+#deprecated
+fn SysErrorKind::op_equal(Self, Self) -> Bool // from trait `Eq`
+fn SysErrorKind::output(Self, &Logger) -> Unit // from trait `Show`
+fn SysErrorKind::to_string(Self) -> String // from trait `Show`
 impl Eq for SysErrorKind
 impl Show for SysErrorKind
 
@@ -125,9 +132,9 @@ impl Show for SysErrorKind
 // Traits
 trait AsCStr
 impl AsCStr for String
-impl AsCStr for @string.StringView
+impl AsCStr for StringView
 
 trait AsPath : AsCStr
 impl AsPath for String
-impl AsPath for @string.StringView
+impl AsPath for StringView
 
