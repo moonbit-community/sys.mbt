@@ -6,7 +6,7 @@ struct Path(OsStr)
 
 ///|
 pub fn Path::op_add(self : Path, other : Path) -> Path {
-  self.inner() + other.inner()
+  self.0 + other.0
 }
 
 ///|
@@ -16,7 +16,7 @@ pub fn Path::from(view : StringView) -> Path {
 
 ///|
 pub fn Path::join(self : Path, other : ArrayView[StringView]) -> Path {
-  let buf = OsStrBuilder::from_osstr(self.inner())
+  let buf = OsStrBuilder::from_osstr(self.0)
   for str in other {
     buf.push(path_separator)
     buf.push(str)
@@ -26,7 +26,7 @@ pub fn Path::join(self : Path, other : ArrayView[StringView]) -> Path {
 
 ///|
 pub fn Path::as_view(self : Path) -> BytesView {
-  self.inner().inner()[:]
+  self.0.0[:]
 }
 
 ///|
@@ -71,11 +71,11 @@ let nt_prefix : String = "\\??\\"
 ///|
 fn maybe_verbatim(path : Path) -> OsStr {
   // assume path utf16 encoded and non-empty
-  if path.inner().inner().to_unchecked_string().has_prefix(verbatim_prefix) ||
-    path.inner().inner().to_unchecked_string().has_prefix(nt_prefix) {
+  if path.0.0.to_unchecked_string().has_prefix(verbatim_prefix) ||
+    path.0.0.to_unchecked_string().has_prefix(nt_prefix) {
     // Early return for paths that are already verbatim
-    return path.inner()
+    return path.0
   }
   // Return the path as-is if no verbatim prefix is found
-  path.inner()
+  path.0
 }

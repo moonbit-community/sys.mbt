@@ -2,17 +2,17 @@
 package "myfreess/sys"
 
 // Values
-fn[P : AsPath] create_dir(P) -> Unit raise SysError
+pub fn[P : AsPath] create_dir(P) -> Unit raise SysError
 
-fn[P : AsPath] create_file(P) -> File raise SysError
+pub fn[P : AsPath] create_file(P) -> File raise SysError
 
-fn moonbit_stdin() -> File
+pub fn moonbit_stdin() -> File
 
-fn[P : AsPath] open_file(P) -> File raise SysError
+pub fn[P : AsPath] open_file(P) -> File raise SysError
 
-fn[P : AsPath] remove_dir(P) -> Unit raise SysError
+pub fn[P : AsPath] remove_dir(P) -> Unit raise SysError
 
-fn[P : AsPath] remove_file(P) -> Unit raise SysError
+pub fn[P : AsPath] remove_file(P) -> Unit raise SysError
 
 // Errors
 pub suberror SysError {
@@ -20,64 +20,57 @@ pub suberror SysError {
   Simple(SysErrorKind)
   Message(String)
 }
-fn SysError::kind(Self) -> SysErrorKind
-fn SysError::output(Self, &Logger) -> Unit // from trait `Show`
-fn SysError::to_string(Self) -> String // from trait `Show`
-impl Show for SysError
+pub fn SysError::kind(Self) -> SysErrorKind
+pub impl Show for SysError
 
 // Types and methods
 #external
 pub type File
-fn File::close(Self) -> Unit raise SysError
-fn File::metadata(Self) -> Metadata raise SysError
-fn File::read(Self, FixedArray[Byte], offset? : Int) -> Int raise SysError
-fn File::read_all(Self) -> Bytes raise SysError
-fn File::write(Self, FixedArray[Byte], offset? : Int) -> Int raise SysError
-fn File::write_all(Self, Bytes) -> Unit raise SysError
+pub fn File::close(Self) -> Unit raise SysError
+pub fn File::metadata(Self) -> Metadata raise SysError
+pub fn File::read(Self, FixedArray[Byte], offset? : Int) -> Int raise SysError
+pub fn File::read_all(Self) -> Bytes raise SysError
+pub fn File::write(Self, FixedArray[Byte], offset? : Int) -> Int raise SysError
+pub fn File::write_all(Self, Bytes) -> Unit raise SysError
 
 #external
 pub type FileType
 
 pub type Metadata
-fn Metadata::filesize(Self) -> Int
-fn Metadata::filetype(Self) -> FileType
-fn Metadata::is_dir(Self) -> Bool
-fn Metadata::is_file(Self) -> Bool
-fn Metadata::is_symlink(Self) -> Bool
-fn Metadata::permissions(Self) -> Permissions
+pub fn Metadata::filesize(Self) -> Int
+pub fn Metadata::filetype(Self) -> FileType
+pub fn Metadata::is_dir(Self) -> Bool
+pub fn Metadata::is_file(Self) -> Bool
+pub fn Metadata::is_symlink(Self) -> Bool
+pub fn Metadata::permissions(Self) -> Permissions
 
 type OsStr
-fn OsStr::add(Self, Self) -> Self // from trait `Add`
-fn OsStr::from(StringView) -> Self
-#deprecated
-fn OsStr::op_add(Self, Self) -> Self // from trait `Add`
-fn OsStr::output(Self, &Logger) -> Unit // from trait `Show`
-fn OsStr::to_string(Self) -> String // from trait `Show`
-impl Add for OsStr
-impl Show for OsStr
-impl AsCStr for OsStr
-impl AsPath for OsStr
+pub fn OsStr::from(StringView) -> Self
+pub impl Add for OsStr
+pub impl Show for OsStr
+pub impl AsCStr for OsStr
+pub impl AsPath for OsStr
 
 type OsStrBuilder
-fn OsStrBuilder::from(StringView) -> Self
-fn OsStrBuilder::from_osstr(OsStr) -> Self
-fn OsStrBuilder::new(size_hint? : Int) -> Self
-fn OsStrBuilder::push(Self, StringView) -> Unit
-fn OsStrBuilder::push_osstr(Self, OsStr) -> Unit
-fn OsStrBuilder::to_osstr(Self) -> OsStr
-impl AsCStr for OsStrBuilder
+pub fn OsStrBuilder::from(StringView) -> Self
+pub fn OsStrBuilder::from_osstr(OsStr) -> Self
+pub fn OsStrBuilder::new(size_hint? : Int) -> Self
+pub fn OsStrBuilder::push(Self, StringView) -> Unit
+pub fn OsStrBuilder::push_osstr(Self, OsStr) -> Unit
+pub fn OsStrBuilder::to_osstr(Self) -> OsStr
+pub impl AsCStr for OsStrBuilder
 
 type Path
-fn Path::as_view(Self) -> BytesView
-fn Path::from(StringView) -> Self
-fn Path::join(Self, ArrayView[StringView]) -> Self
-fn Path::op_add(Self, Self) -> Self
-impl AsCStr for Path
-impl AsPath for Path
+pub fn Path::as_view(Self) -> BytesView
+pub fn Path::from(StringView) -> Self
+pub fn Path::join(Self, ArrayView[StringView]) -> Self
+pub fn Path::op_add(Self, Self) -> Self
+pub impl AsCStr for Path
+pub impl AsPath for Path
 
 #external
 pub type Permissions
-fn Permissions::is_readonly(Self) -> Bool
+pub fn Permissions::is_readonly(Self) -> Bool
 
 pub enum SysErrorKind {
   NotFound
@@ -119,22 +112,17 @@ pub enum SysErrorKind {
   InProgress
   Uncategorized
 }
-fn SysErrorKind::equal(Self, Self) -> Bool // from trait `Eq`
-#deprecated
-fn SysErrorKind::op_equal(Self, Self) -> Bool // from trait `Eq`
-fn SysErrorKind::output(Self, &Logger) -> Unit // from trait `Show`
-fn SysErrorKind::to_string(Self) -> String // from trait `Show`
-impl Eq for SysErrorKind
-impl Show for SysErrorKind
+pub impl Eq for SysErrorKind
+pub impl Show for SysErrorKind
 
 // Type aliases
 
 // Traits
 trait AsCStr
-impl AsCStr for String
-impl AsCStr for StringView
+pub impl AsCStr for String
+pub impl AsCStr for StringView
 
 trait AsPath : AsCStr
-impl AsPath for String
-impl AsPath for StringView
+pub impl AsPath for String
+pub impl AsPath for StringView
 

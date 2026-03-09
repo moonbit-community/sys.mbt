@@ -10,9 +10,9 @@ trait AsCStr {
 pub impl AsCStr for OsStr with to_cstr(self) {
   if moonbit_os_iswin32() {
     // UTF-16 NULL terminator
-    self.inner() + "\x00\x00"
+    self.0 + "\x00\x00"
   } else {
-    self.inner() + "\x00"
+    self.0 + "\x00"
   }
 }
 
@@ -20,11 +20,12 @@ pub impl AsCStr for OsStr with to_cstr(self) {
 pub impl AsCStr for OsStrBuilder with to_cstr(self) {
   if moonbit_os_iswin32() {
     // UTF-16 NULL terminator
-    self.inner()..write_byte(0x00)..write_byte(0x00)
+    self.0.write_byte(0x00)
+    self.0.write_byte(0x00)
   } else {
-    self.inner().write_byte(0x00)
+    self.0.write_byte(0x00)
   }
-  return CStr(self.inner().contents())
+  return CStr(self.0.contents())
 }
 
 ///|
@@ -39,5 +40,5 @@ pub impl AsCStr for StringView with to_cstr(self) {
 
 ///|
 pub impl AsCStr for Path with to_cstr(self) {
-  return self.inner().to_cstr()
+  return self.0.to_cstr()
 }
