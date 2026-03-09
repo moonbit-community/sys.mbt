@@ -1,0 +1,13 @@
+import {
+  "moonbitlang/core/buffer",
+  "moonbitlang/core/encoding/utf8",
+  "myfreess/sys/errno/win32",
+  "myfreess/sys/errno/linux",
+}
+
+warnings = "-1-6"
+
+options(
+  backend: [ "native" ],
+  "native-stub": [ "stub.c" ],
+)

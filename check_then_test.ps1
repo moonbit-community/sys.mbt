@@ -15,13 +15,7 @@ if ($Mode -eq 'local') {
     moon check --target native
 }
 
-
-# $env:MOON_CC = 'cl.exe /fsanitize=address /Z7'
-
 moon test --target native
-Set-Location .\tests
-moon test --target native
-Set-Location ..
 
 Set-PSDebug -Trace 0
 $ErrorActionPreference = 'Continue'
