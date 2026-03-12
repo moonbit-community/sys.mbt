@@ -143,7 +143,8 @@ fn last_sys_error() -> SysError {
 }
 
 ///|
-fn decode_sys_error_kind_win32(errno : Int) -> SysErrorKind {
+#cfg(platform="windows")
+fn decode_sys_error_kind(errno : Int) -> SysErrorKind {
   match errno {
     @win32.ERROR_ACCESS_DENIED => return PermissionDenied
     @win32.ERROR_ALREADY_EXISTS => return AlreadyExists
@@ -217,7 +218,8 @@ fn decode_sys_error_kind_win32(errno : Int) -> SysErrorKind {
 }
 
 ///|
-fn decode_sys_error_kind_linux(errno : Int) -> SysErrorKind {
+#cfg(not(platform="windows"))
+fn decode_sys_error_kind(errno : Int) -> SysErrorKind {
   match errno {
     @linux.E2BIG => ArgumentListTooLong
     @linux.EADDRINUSE => AddrInUse
@@ -266,20 +268,14 @@ fn decode_sys_error_kind_linux(errno : Int) -> SysErrorKind {
 ///|
 pub fn SysError::kind(self : SysError) -> SysErrorKind {
   match self {
-    SysError::Raw(errno) =>
-      if moonbit_os_iswin32() {
-        decode_sys_error_kind_win32(errno)
-      } else {
-        decode_sys_error_kind_linux(errno)
-      }
+    SysError::Raw(errno) => decode_sys_error_kind(errno)
     SysError::Simple(kind) => kind
     SysError::Message(_) => Uncategorized
   }
 }
 
 ///|
+#cfg(platform="windows")
 test {
-  if moonbit_os_iswin32() {
-    inspect(Raw(10022).kind(), content="InvalidInput")
-  }
+  inspect(Raw(10022).kind(), content="InvalidInput")
 }
