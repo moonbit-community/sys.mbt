@@ -59,8 +59,8 @@ test {
 
 ///|
 test {
-  inspect(filesize("blobs/foo.txt"), content="6")
-  inspect(filesize("blobs/bar.txt"), content="17")
+  assert_eq(filesize("blobs/foo.txt"), 6)
+  assert_eq(filesize("blobs/bar.txt"), 17)
 }
 
 ///|
@@ -94,18 +94,8 @@ test {
 
 ///|
 test {
-  inspect(
-    read_all("blobs/rfoo.txt"),
-    content=(
-      #|b"ABCDEF"
-    ),
-  )
-  inspect(
-    read_all("blobs/rbar.txt"),
-    content=(
-      #|b"10\x0a11\x0a12\x0a13\x0a14\x0a15"
-    ),
-  )
+  assert_eq(read_all("blobs/rfoo.txt"), b"ABCDEF")
+  assert_eq(read_all("blobs/rbar.txt"), b"10\x0a11\x0a12\x0a13\x0a14\x0a15")
   assert_true(
     (try? read_all("not_exist.txt")).map_err(err => err.kind()) is Err(NotFound),
   )
