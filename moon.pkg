@@ -3,11 +3,8 @@ import {
   "moonbitlang/core/encoding/utf8",
   "myfreess/sys/errno/win32",
   "myfreess/sys/errno/linux",
+  "myfreess/sys/internal/ffi",
+  "myfreess/sys/internal/cstr",
 }
 
 warnings = "-1-6-29"
-
-options(
-  backend: [ "native" ],
-  "native-stub": [ "stub.c" ],
-)

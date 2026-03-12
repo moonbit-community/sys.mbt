@@ -1,119 +1,25 @@
 ///|
-#external
-pub type File
+struct File(@ffi.File)
 
 ///|
-#external
-pub type FileType
+struct FileType(@ffi.FileType)
 
 ///|
-pub type Metadata
+struct Metadata(@ffi.Metadata)
 
 ///|
-#external
-pub type Permissions
-
-///|
-extern "c" fn moonbit_file_is_invalid(file : File) -> Bool = "moonbit_file_is_invalid"
-
-///|
-#borrow(filename)
-extern "c" fn moonbit_file_open(filename : CStr) -> File = "moonbit_file_open"
-
-///|
-#borrow(filename)
-extern "c" fn moonbit_remove_file(filename : CStr) -> Bool = "moonbit_remove_file"
-
-///|
-#borrow(dirname)
-extern "c" fn moonbit_create_dir(dirname : CStr) -> Bool = "moonbit_create_dir"
-
-///|
-#borrow(dirname)
-extern "c" fn moonbit_remove_dir(dirname : CStr) -> Bool = "moonbit_remove_dir"
-
-///|
-#borrow(filename)
-extern "c" fn moonbit_file_create(filename : CStr) -> File = "moonbit_file_create"
-
-///|
-#borrow(buf)
-extern "c" fn moonbit_file_read(
-  file : File,
-  buf : FixedArray[Byte],
-  offset : Int,
-  capacity : Int,
-) -> Int = "moonbit_file_read"
-
-///|
-#borrow(buf)
-extern "c" fn moonbit_file_write(
-  file : File,
-  buf : FixedArray[Byte],
-  offset : Int,
-  capacity : Int,
-) -> Int = "moonbit_file_write"
-
-///|
-#borrow(bytes)
-extern "c" fn moonbit_file_read_all(
-  file : File,
-  bytes : Bytes,
-  capacity : Int,
-) -> Int = "moonbit_file_read_all"
-
-///|
-#borrow(bytes)
-extern "c" fn moonbit_file_write_all(
-  file : File,
-  bytes : Bytes,
-  capacity : Int,
-) -> Int = "moonbit_file_write_all"
-
-///|
-extern "c" fn moonbit_file_close(file : File) -> Bool = "moonbit_file_close"
-
-///|
-extern "c" fn moonbit_file_metadata_new() -> Metadata = "moonbit_file_metadata_new"
-
-///|
-#borrow(stat)
-extern "c" fn moonbit_file_metadata(file : File, stat : Metadata) -> Bool = "moonbit_file_metadata"
-
-///|
-#borrow(stat)
-extern "c" fn moonbit_file_metadata_filetype(stat : Metadata) -> FileType = "moonbit_file_metadata_filetype"
-
-///|
-extern "c" fn moonbit_metadata_filetype_is_dir(filetype : FileType) -> Bool = "moonbit_metadata_filetype_is_dir"
-
-///|
-extern "c" fn moonbit_metadata_filetype_is_file(filetype : FileType) -> Bool = "moonbit_metadata_filetype_is_file"
-
-///|
-extern "c" fn moonbit_metadata_filetype_is_symlink(filetype : FileType) -> Bool = "moonbit_metadata_filetype_is_symlink"
-
-///|
-#borrow(stat)
-extern "c" fn moonbit_file_metadata_filesize(stat : Metadata) -> Int = "moonbit_file_metadata_filesize"
-
-///|
-#borrow(stat)
-extern "c" fn moonbit_file_metadata_permissions(stat : Metadata) -> Permissions = "moonbit_file_metadata_permissions"
-
-///|
-extern "c" fn moonbit_metadata_permissions_readonly(perm : Permissions) -> Bool = "moonbit_metadata_permissions_readonly"
+struct Permissions(@ffi.Permissions)
 
 ///|
 /// Open a file for reading.
 /// If the file does not exist, a `SysError` is raised.
 pub fn open_file(filename : StringView) -> File raise SysError {
-  let filename = build_cstr(filename)
-  let file = moonbit_file_open(filename)
-  if moonbit_file_is_invalid(file) {
+  let filename = @cstr.build_cstr(filename)
+  let file = @ffi.moonbit_file_open(filename)
+  if @ffi.moonbit_file_is_invalid(file) {
     raise last_sys_error()
   } else {
-    return file
+    return File(file)
   }
 }
 
@@ -122,9 +28,9 @@ pub fn open_file(filename : StringView) -> File raise SysError {
 /// If the file already exists, it will be truncated to zero length.
 /// If the file cannot be created, a `SysError` is raised.
 pub fn create_file(filename : StringView) -> File raise SysError {
-  let filename = build_cstr(filename)
-  let file = moonbit_file_create(filename)
-  if moonbit_file_is_invalid(file) {
+  let filename = @cstr.build_cstr(filename)
+  let file = @ffi.moonbit_file_create(filename)
+  if @ffi.moonbit_file_is_invalid(file) {
     raise last_sys_error()
   } else {
     return file
@@ -133,39 +39,39 @@ pub fn create_file(filename : StringView) -> File raise SysError {
 
 ///|
 pub fn remove_file(filename : StringView) -> Unit raise SysError {
-  let filename = build_cstr(filename)
-  if not(moonbit_remove_file(filename)) {
+  let filename = @cstr.build_cstr(filename)
+  if not(@ffi.moonbit_remove_file(filename)) {
     raise last_sys_error()
   }
 }
 
 ///|
 pub fn create_dir(dirname : StringView) -> Unit raise SysError {
-  let dirname = build_cstr(dirname)
-  if not(moonbit_create_dir(dirname)) {
+  let dirname = @cstr.build_cstr(dirname)
+  if not(@ffi.moonbit_create_dir(dirname)) {
     raise last_sys_error()
   }
 }
 
 ///|
 pub fn remove_dir(dirname : StringView) -> Unit raise SysError {
-  let filename = build_cstr(dirname)
-  if not(moonbit_remove_dir(filename)) {
+  let filename = @cstr.build_cstr(dirname)
+  if not(@ffi.moonbit_remove_dir(filename)) {
     raise last_sys_error()
   }
 }
 
 ///|
 pub fn File::close(self : File) -> Unit raise SysError {
-  if not(moonbit_file_close(self)) {
+  if not(@ffi.moonbit_file_close(self.0)) {
     raise last_sys_error()
   }
 }
 
 ///|
 pub fn File::metadata(self : File) -> Metadata raise SysError {
-  let stat = moonbit_file_metadata_new()
-  let successfully_init_stat = moonbit_file_metadata(self, stat)
+  let stat = @ffi.moonbit_file_metadata_new()
+  let successfully_init_stat = @ffi.moonbit_file_metadata(self.0, stat)
   if successfully_init_stat {
     return stat
   } else {
@@ -186,37 +92,37 @@ pub fn File::metadata(self : File) -> Metadata raise SysError {
 
 ///|
 pub fn Metadata::filesize(self : Metadata) -> Int {
-  return moonbit_file_metadata_filesize(self)
+  return @ffi.moonbit_file_metadata_filesize(self.0)
 }
 
 ///|
 pub fn Metadata::filetype(self : Metadata) -> FileType {
-  return moonbit_file_metadata_filetype(self)
+  return FileType(@ffi.moonbit_file_metadata_filetype(self.0))
 }
 
 ///|
 pub fn Metadata::is_dir(self : Metadata) -> Bool {
-  return moonbit_metadata_filetype_is_dir(self.filetype())
+  return @ffi.moonbit_metadata_filetype_is_dir(self.filetype().0)
 }
 
 ///|
 pub fn Metadata::is_file(self : Metadata) -> Bool {
-  return moonbit_metadata_filetype_is_file(self.filetype())
+  return @ffi.moonbit_metadata_filetype_is_file(self.filetype().0)
 }
 
 ///|
 pub fn Metadata::is_symlink(self : Metadata) -> Bool {
-  return moonbit_metadata_filetype_is_symlink(self.filetype())
+  return @ffi.moonbit_metadata_filetype_is_symlink(self.filetype().0)
 }
 
 ///|
 pub fn Metadata::permissions(self : Metadata) -> Permissions {
-  return moonbit_file_metadata_permissions(self)
+  return @ffi.moonbit_file_metadata_permissions(self.0)
 }
 
 ///|
 pub fn Permissions::is_readonly(self : Permissions) -> Bool {
-  return moonbit_metadata_permissions_readonly(self)
+  return @ffi.moonbit_metadata_permissions_readonly(self.0)
 }
 
 ///|
@@ -226,7 +132,7 @@ pub fn File::read(
   offset? : Int = 0,
 ) -> Int raise SysError {
   let capacity = buf.length()
-  let have_read = moonbit_file_read(self, buf, offset, capacity)
+  let have_read = @ffi.moonbit_file_read(self.0, buf, offset, capacity)
   guard have_read >= 0 else { raise last_sys_error() }
   return have_read
 }
@@ -238,7 +144,7 @@ pub fn File::write(
   offset? : Int = 0,
 ) -> Int raise SysError {
   let capacity = buf.length()
-  let written = moonbit_file_write(self, buf, offset, capacity)
+  let written = @ffi.moonbit_file_write(self.0, buf, offset, capacity)
   guard written >= 0 else { raise last_sys_error() }
   return written
 }
@@ -248,7 +154,7 @@ pub fn File::read_all(self : File) -> Bytes raise SysError {
   let metadata = self.metadata()
   let size = metadata.filesize()
   let buf = Bytes::make(size, 0)
-  let have_read = moonbit_file_read_all(self, buf, size)
+  let have_read = @ffi.moonbit_file_read_all(self.0, buf, size)
   guard have_read == size else { raise last_sys_error() }
   return buf
 }
@@ -256,6 +162,6 @@ pub fn File::read_all(self : File) -> Bytes raise SysError {
 ///|
 pub fn File::write_all(self : File, buf : Bytes) -> Unit raise SysError {
   let size = buf.length()
-  let written = moonbit_file_write_all(self, buf, size)
+  let written = @ffi.moonbit_file_write_all(self.0, buf, size)
   guard written == size else { raise last_sys_error() }
 }
