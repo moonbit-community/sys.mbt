@@ -1,0 +1,70 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "myfreess/sys/internal/ffi"
+
+import {
+  "myfreess/sys/internal/cstr",
+}
+
+// Values
+pub fn moonbit_create_dir(@cstr.CStr) -> Bool
+
+pub fn moonbit_file_close(File) -> Bool
+
+pub fn moonbit_file_create(@cstr.CStr) -> File
+
+pub fn moonbit_file_is_invalid(File) -> Bool
+
+pub fn moonbit_file_metadata(File, Metadata) -> Bool
+
+pub fn moonbit_file_metadata_filesize(Metadata) -> Int
+
+pub fn moonbit_file_metadata_filetype(Metadata) -> FileType
+
+pub fn moonbit_file_metadata_new() -> Metadata
+
+pub fn moonbit_file_metadata_permissions(Metadata) -> Permissions
+
+pub fn moonbit_file_open(@cstr.CStr) -> File
+
+pub fn moonbit_file_read(File, FixedArray[Byte], Int, Int) -> Int
+
+pub fn moonbit_file_read_all(File, Bytes, Int) -> Int
+
+pub fn moonbit_file_write(File, FixedArray[Byte], Int, Int) -> Int
+
+pub fn moonbit_file_write_all(File, Bytes, Int) -> Int
+
+pub fn moonbit_metadata_filetype_is_dir(FileType) -> Bool
+
+pub fn moonbit_metadata_filetype_is_file(FileType) -> Bool
+
+pub fn moonbit_metadata_filetype_is_symlink(FileType) -> Bool
+
+pub fn moonbit_metadata_permissions_readonly(Permissions) -> Bool
+
+pub fn moonbit_remove_dir(@cstr.CStr) -> Bool
+
+pub fn moonbit_remove_file(@cstr.CStr) -> Bool
+
+pub fn moonbit_stdin() -> File
+
+pub fn moonbit_stdout() -> File
+
+// Errors
+
+// Types and methods
+#external
+pub type File
+
+#external
+pub type FileType
+
+pub type Metadata
+
+#external
+pub type Permissions
+
+// Type aliases
+
+// Traits
+

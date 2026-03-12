@@ -1,0 +1,8 @@
+import {
+  "myfreess/sys/internal/cstr",
+}
+
+options(
+  backend: [ "native" ],
+  "native-stub": [ "stub.c" ],
+)

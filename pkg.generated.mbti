@@ -6,8 +6,6 @@ pub fn create_dir(StringView) -> Unit raise SysError
 
 pub fn create_file(StringView) -> File raise SysError
 
-pub fn moonbit_stdin() -> File
-
 pub fn open_file(StringView) -> File raise SysError
 
 pub fn remove_dir(StringView) -> Unit raise SysError
@@ -24,8 +22,7 @@ pub fn SysError::kind(Self) -> SysErrorKind
 pub impl Show for SysError
 
 // Types and methods
-#external
-pub type File
+type File
 pub fn File::close(Self) -> Unit raise SysError
 pub fn File::metadata(Self) -> Metadata raise SysError
 pub fn File::read(Self, FixedArray[Byte], offset? : Int) -> Int raise SysError
@@ -33,10 +30,9 @@ pub fn File::read_all(Self) -> Bytes raise SysError
 pub fn File::write(Self, FixedArray[Byte], offset? : Int) -> Int raise SysError
 pub fn File::write_all(Self, Bytes) -> Unit raise SysError
 
-#external
-pub type FileType
+type FileType
 
-pub type Metadata
+type Metadata
 pub fn Metadata::filesize(Self) -> Int
 pub fn Metadata::filetype(Self) -> FileType
 pub fn Metadata::is_dir(Self) -> Bool
@@ -44,8 +40,7 @@ pub fn Metadata::is_file(Self) -> Bool
 pub fn Metadata::is_symlink(Self) -> Bool
 pub fn Metadata::permissions(Self) -> Permissions
 
-#external
-pub type Permissions
+type Permissions
 pub fn Permissions::is_readonly(Self) -> Bool
 
 pub enum SysErrorKind {

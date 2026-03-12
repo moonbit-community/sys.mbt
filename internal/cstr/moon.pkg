@@ -1,0 +1,5 @@
+import {
+  "moonbitlang/core/buffer",
+}
+
+warnings = "-6"

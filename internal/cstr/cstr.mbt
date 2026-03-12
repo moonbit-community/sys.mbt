@@ -1,9 +1,9 @@
 ///|
-priv struct CStr(Bytes)
+struct CStr(Bytes)
 
 ///|
 #cfg(platform="windows")
-fn build_cstr(str : StringView) -> CStr {
+pub fn build_cstr(str : StringView) -> CStr {
   let buf = @buffer.new(size_hint=str.length() * 2 + 2)
   build_osstr(str, buf)
   buf.write_byte(0x00)
@@ -13,7 +13,7 @@ fn build_cstr(str : StringView) -> CStr {
 
 ///|
 #cfg(not(platform="windows"))
-fn build_cstr(str : StringView) -> CStr {
+pub fn build_cstr(str : StringView) -> CStr {
   let buf = @buffer.new(size_hint=str.length() * 2 + 1)
   build_osstr(str, buf)
   buf.write_byte(0x00)
