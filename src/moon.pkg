@@ -5,7 +5,7 @@ import {
   "myfreess/sys/errno/linux",
 }
 
-warnings = "-1-6"
+warnings = "-1-6-29"
 
 options(
   backend: [ "native" ],

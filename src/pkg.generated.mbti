@@ -2,17 +2,17 @@
 package "myfreess/sys"
 
 // Values
-pub fn[P : AsPath] create_dir(P) -> Unit raise SysError
+pub fn create_dir(StringView) -> Unit raise SysError
 
-pub fn[P : AsPath] create_file(P) -> File raise SysError
+pub fn create_file(StringView) -> File raise SysError
 
 pub fn moonbit_stdin() -> File
 
-pub fn[P : AsPath] open_file(P) -> File raise SysError
+pub fn open_file(StringView) -> File raise SysError
 
-pub fn[P : AsPath] remove_dir(P) -> Unit raise SysError
+pub fn remove_dir(StringView) -> Unit raise SysError
 
-pub fn[P : AsPath] remove_file(P) -> Unit raise SysError
+pub fn remove_file(StringView) -> Unit raise SysError
 
 // Errors
 pub suberror SysError {
@@ -43,30 +43,6 @@ pub fn Metadata::is_dir(Self) -> Bool
 pub fn Metadata::is_file(Self) -> Bool
 pub fn Metadata::is_symlink(Self) -> Bool
 pub fn Metadata::permissions(Self) -> Permissions
-
-type OsStr
-pub fn OsStr::from(StringView) -> Self
-pub impl Add for OsStr
-pub impl Show for OsStr
-pub impl AsCStr for OsStr
-pub impl AsPath for OsStr
-
-type OsStrBuilder
-pub fn OsStrBuilder::from(StringView) -> Self
-pub fn OsStrBuilder::from_osstr(OsStr) -> Self
-pub fn OsStrBuilder::new(size_hint? : Int) -> Self
-pub fn OsStrBuilder::push(Self, StringView) -> Unit
-pub fn OsStrBuilder::push_osstr(Self, OsStr) -> Unit
-pub fn OsStrBuilder::to_osstr(Self) -> OsStr
-pub impl AsCStr for OsStrBuilder
-
-type Path
-pub fn Path::as_view(Self) -> BytesView
-pub fn Path::from(StringView) -> Self
-pub fn Path::join(Self, ArrayView[StringView]) -> Self
-pub fn Path::op_add(Self, Self) -> Self
-pub impl AsCStr for Path
-pub impl AsPath for Path
 
 #external
 pub type Permissions
@@ -118,11 +94,4 @@ pub impl Show for SysErrorKind
 // Type aliases
 
 // Traits
-trait AsCStr
-pub impl AsCStr for String
-pub impl AsCStr for StringView
-
-trait AsPath : AsCStr
-pub impl AsPath for String
-pub impl AsPath for StringView
 

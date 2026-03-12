@@ -107,8 +107,8 @@ extern "c" fn moonbit_metadata_permissions_readonly(perm : Permissions) -> Bool 
 ///|
 /// Open a file for reading.
 /// If the file does not exist, a `SysError` is raised.
-pub fn[P : AsPath] open_file(filename : P) -> File raise SysError {
-  let filename = filename.to_path().to_cstr()
+pub fn open_file(filename : StringView) -> File raise SysError {
+  let filename = build_cstr(filename)
   let file = moonbit_file_open(filename)
   if moonbit_file_is_invalid(file) {
     raise last_sys_error()
@@ -121,8 +121,8 @@ pub fn[P : AsPath] open_file(filename : P) -> File raise SysError {
 /// Creates a new file with the given filename.
 /// If the file already exists, it will be truncated to zero length.
 /// If the file cannot be created, a `SysError` is raised.
-pub fn[P : AsPath] create_file(filename : P) -> File raise SysError {
-  let filename = filename.to_path().to_cstr()
+pub fn create_file(filename : StringView) -> File raise SysError {
+  let filename = build_cstr(filename)
   let file = moonbit_file_create(filename)
   if moonbit_file_is_invalid(file) {
     raise last_sys_error()
@@ -132,24 +132,24 @@ pub fn[P : AsPath] create_file(filename : P) -> File raise SysError {
 }
 
 ///|
-pub fn[P : AsPath] remove_file(filename : P) -> Unit raise SysError {
-  let filename = filename.to_path().to_cstr()
+pub fn remove_file(filename : StringView) -> Unit raise SysError {
+  let filename = build_cstr(filename)
   if not(moonbit_remove_file(filename)) {
     raise last_sys_error()
   }
 }
 
 ///|
-pub fn[P : AsPath] create_dir(dirname : P) -> Unit raise SysError {
-  let dirname = dirname.to_path().to_cstr()
+pub fn create_dir(dirname : StringView) -> Unit raise SysError {
+  let dirname = build_cstr(dirname)
   if not(moonbit_create_dir(dirname)) {
     raise last_sys_error()
   }
 }
 
 ///|
-pub fn[P : AsPath] remove_dir(dirname : P) -> Unit raise SysError {
-  let filename = dirname.to_path().to_cstr()
+pub fn remove_dir(dirname : StringView) -> Unit raise SysError {
+  let filename = build_cstr(dirname)
   if not(moonbit_remove_dir(filename)) {
     raise last_sys_error()
   }

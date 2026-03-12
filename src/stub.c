@@ -19,16 +19,6 @@ void moonbit_release_common_object(void* self) {}
 #include <stdbool.h>
 #endif
 
-#if defined (_WIN32) || defined (_WIN64)
-MOONBIT_EXPORT moonbit_bool_t moonbit_os_iswin32() {
-    return true;
-}
-#else
-MOONBIT_EXPORT moonbit_bool_t moonbit_os_iswin32() {
-    return false;
-}
-#endif
-
 // Errno related functions
 #if defined (_WIN32) || defined (_WIN64)
 MOONBIT_EXPORT int32_t moonbit_errno_get_errcode() {
