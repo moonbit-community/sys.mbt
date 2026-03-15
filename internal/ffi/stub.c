@@ -173,7 +173,7 @@ MOONBIT_EXPORT FILE moonbit_file_open(moonbit_bytes_t filename) {
 
 MOONBIT_EXPORT FILE moonbit_file_create(moonbit_bytes_t filename) {
     // 0o666 = (6 × 8^2) + (6 × 8^1) + (6 × 8^0) = 384 + 48 + 6 = 438
-    return open(filename, O_CLOEXEC | O_WRONLY | O_CREAT, 0666);
+    return open(filename, O_CLOEXEC | O_WRONLY | O_CREAT | O_TRUNC, 0666);
 }
 
 MOONBIT_EXPORT moonbit_bool_t moonbit_remove_file(moonbit_bytes_t filename) {
