@@ -17,9 +17,8 @@ pub suberror SysError {
   Raw(Int)
   Simple(SysErrorKind)
   Message(String)
-}
+} derive(Show)
 pub fn SysError::kind(Self) -> SysErrorKind
-pub impl Show for SysError
 
 // Types and methods
 type File
@@ -82,9 +81,7 @@ pub enum SysErrorKind {
   OutOfMemory
   InProgress
   Uncategorized
-}
-pub impl Eq for SysErrorKind
-pub impl Show for SysErrorKind
+} derive(Eq, Show)
 
 // Type aliases
 

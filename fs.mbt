@@ -40,7 +40,7 @@ pub fn create_file(filename : StringView) -> File raise SysError {
 ///|
 pub fn remove_file(filename : StringView) -> Unit raise SysError {
   let filename = @cstr.build_cstr(filename)
-  if not(@ffi.moonbit_remove_file(filename)) {
+  if !@ffi.moonbit_remove_file(filename) {
     raise last_sys_error()
   }
 }
@@ -48,7 +48,7 @@ pub fn remove_file(filename : StringView) -> Unit raise SysError {
 ///|
 pub fn create_dir(dirname : StringView) -> Unit raise SysError {
   let dirname = @cstr.build_cstr(dirname)
-  if not(@ffi.moonbit_create_dir(dirname)) {
+  if !@ffi.moonbit_create_dir(dirname) {
     raise last_sys_error()
   }
 }
@@ -56,14 +56,14 @@ pub fn create_dir(dirname : StringView) -> Unit raise SysError {
 ///|
 pub fn remove_dir(dirname : StringView) -> Unit raise SysError {
   let filename = @cstr.build_cstr(dirname)
-  if not(@ffi.moonbit_remove_dir(filename)) {
+  if !@ffi.moonbit_remove_dir(filename) {
     raise last_sys_error()
   }
 }
 
 ///|
 pub fn File::close(self : File) -> Unit raise SysError {
-  if not(@ffi.moonbit_file_close(self.0)) {
+  if !@ffi.moonbit_file_close(self.0) {
     raise last_sys_error()
   }
 }
